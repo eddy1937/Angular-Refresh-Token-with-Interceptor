@@ -11,7 +11,7 @@ import { InMemoryDataService } from './inMemoryData/in-memory-data.service';
 import { HttpLogInterceptor } from './log/http-log-interceptor';
 
 function initFactory(authService: AuthService) {
-  return () => authService.queryUserInfoByAuth();
+  return () => authService.queryUserInfoByAuth().pipe(delay(600));
 }
 
 @NgModule({
