@@ -15,24 +15,14 @@ const { contentPath } = environment;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild("log", { static: true })
-  private logRef!: ElementRef<HTMLElement>;
-
   logs: Array<HttpLogType> = [];
 
   queryUserInfoByAuth$ = this.authService.queryUserInfoByAuth();
 
   onLogin$ = this.authService.applyToken().pipe(switchMap(() => this.queryUserInfoByAuth$));
 
-  get logElement() {
-      return this.logRef.nativeElement;
-  }
-
   constructor(private http: HttpClient, public authService: AuthService, private logService: HttpLogService) {
-    this.logService.httpLog$.subscribe((log) => {
-      this.logs.push(log);
-      setTimeout(() => this.logElement.scrollTop = this.logElement.scrollHeight, 0);
-    });
+    this.logService.httpLog$.subscribe((log) => this.logs.unshift(log));
   }
 
   ngOnInit(): void { }

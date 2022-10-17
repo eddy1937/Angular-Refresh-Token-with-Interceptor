@@ -1,17 +1,15 @@
 <div class="container text-white">
-  <h1 class="display-4 pt-5 pb-3">Angular interceptor with RxJS (Refresh Token)</h1>
+  <h1 class="display-5 pt-5 pb-3">Angular interceptor with RxJS (Refresh Token)</h1>
   <div class="my-3">
     <div class="my-3">
-      <button *ngIf="authService.isLogin" class="btn btn-outline-danger mx-2"
+      <button *ngIf="authService.isLogin" class="btn btn-outline-danger m-2"
         (click)="authService.logout()">Logout</button>
-      <button *ngIf="!authService.isLogin" class="btn btn-outline-success mx-2" (click)="onLogin()">Login</button>
-      <button type="button" class="btn btn-outline-primary mx-2"
+      <button *ngIf="!authService.isLogin" class="btn btn-outline-success m-2" (click)="onLogin()">Login</button>
+      <button type="button" class="btn btn-outline-primary m-2"
         (click)="queryUserInfoByAuth()">queryUserInfoByAuth</button>
-      <button type="button" class="btn btn-outline-success mx-2"
-        (click)="ok()">OK</button>
-      <button type="button" class="btn btn-outline-danger mx-2"
-        (click)="notFound()">NotFound</button>
-      <button type="button" class="btn btn-outline-danger mx-2"
+      <button type="button" class="btn btn-outline-success m-2" (click)="ok()">OK</button>
+      <button type="button" class="btn btn-outline-danger m-2" (click)="notFound()">NotFound</button>
+      <button type="button" class="btn btn-outline-danger m-2"
         (click)="internalServerError()">InternalServerError</button>
     </div>
     <div *ngIf="!authService.isLogin" class="alert alert-danger" role="alert">
@@ -38,27 +36,26 @@
       <div class="token">{{ authService.refreshToken }}</div>
     </div>
   </div>
-  <div #log class="log my-5 px-2">
-    <table class="table table-sm table-dark">
-      <thead>
-        <tr>
-          <th scope="col"><button type="button" class="btn btn-outline-secondary btn-sm p-0 px-1 clear"
-              (click)="logs.length = 0"><i class="bi bi-dash-circle-fill"></i></button></th>
-          <th scope="col">Status</th>
-          <th scope="col">StatusText</th>
-          <th scope="col">Url</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let log of logs">
-          <tr [ngClass]="log.ok ? 'table-success' : 'table-danger'">
-            <th scope="row"><i class="bi" [ngClass]="log.ok ? 'bi-check2' : 'bi-x-lg'"></i></th>
-            <td>{{ log.status }}</td>
-            <td>{{ log.statusText }}</td>
-            <td>{{ log.url }}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
+  <div class="log my-5 px-2">
+    <div class="head row">
+      <div class="col-2">
+        <button type="button" class="btn btn-outline-secondary btn-sm p-0 px-1 clear" (click)="logs.length = 0">
+          <i class="bi bi-dash-circle-fill"></i>
+        </button>
+      </div>
+      <div class="col-2">Status</div>
+      <div class="col-4">StatusText</div>
+      <div class="col-4">Url</div>
+    </div>
+    <div class="body">
+      <div>
+        <div class="row" *ngFor="let log of logs" [ngClass]="log.ok ? 'bg-success' : 'bg-danger'">
+          <div class="col-2"><i class="bi" [ngClass]="log.ok ? 'bi-check2' : 'bi-x-lg'"></i></div>
+          <div class="col-2">{{ log.status }}</div>
+          <div class="col-4">{{ log.statusText }}</div>
+          <div class="col-4">{{ log.url }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
