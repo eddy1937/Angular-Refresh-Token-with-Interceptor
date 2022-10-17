@@ -9,6 +9,7 @@ import { AuthHttpInterceptor } from './auth/auth-http-interceptor';
 import { AuthService } from './auth/auth.service';
 import { InMemoryDataService } from './inMemoryData/in-memory-data.service';
 import { HttpLogInterceptor } from './log/http-log-interceptor';
+import { AppRoutingModule } from './app-routing.module';
 
 function initFactory(authService: AuthService) {
   return () => authService.queryUserInfoByAuth().pipe(delay(600));
@@ -21,7 +22,8 @@ function initFactory(authService: AuthService) {
   imports: [
     BrowserModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false })
+    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
+    AppRoutingModule
   ],
   providers: [
     {
