@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, defer, EMPTY, iif, Observable, share, takeUntil } from 'rxjs';
+import { catchError, defer, EMPTY, iif, Observable, share, takeUntil, throwError, retry } from 'rxjs';
 import { AuthService } from './auth.service';
 import { catch401Error, startWhen } from './operator';
 import { InterceptorSkipHeader } from './uitls';
@@ -32,7 +32,22 @@ export class AuthHttpInterceptor implements HttpInterceptor  {
 
   httpErrorsHandler() {
     return (source$: Observable<any>) => source$.pipe(
-      catch401Error(() => this.handle401Error(source$)),
+      // catch401Error(() => this.handle401Error(source$)),
+      this.catch401Error(1),
+    );
+  }
+
+  catch401Error(refreshTimes: number) {
+    return (source$: Observable<any>) => source$.pipe(
+      retry({
+        delay: (err, count) => {
+          if (count > refreshTimes || err.status !== 401) {
+            return throwError(() => err);
+          }
+          return this.refresh$.pipe(takeUntil(this.authService.logout$));
+        }
+      }),
+      catch401Error(() => this.logoutUser$),
     );
   }
 
