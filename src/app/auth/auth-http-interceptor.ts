@@ -38,13 +38,16 @@ export class AuthHttpInterceptor implements HttpInterceptor  {
   }
 
   catch401Error(refreshTimes: number) {
+    const refresh$ = this.refresh$.pipe(takeUntil(this.authService.logout$));
     return (source$: Observable<any>) => source$.pipe(
       retry({
         delay: (err, count) => {
-          if (count > refreshTimes || err.status !== 401) {
-            return throwError(() => err);
-          }
-          return this.refresh$.pipe(takeUntil(this.authService.logout$));
+          // if (count > refreshTimes || err.status !== 401) {
+          //   return throwError(() => err);
+          // }
+          // return this.refresh$.pipe(takeUntil(this.authService.logout$));
+          const error$ = throwError(() => err);
+          return error$.pipe(catch401Error(() => count > refreshTimes ? error$ : refresh$));
         }
       }),
       catch401Error(() => this.logoutUser$),
