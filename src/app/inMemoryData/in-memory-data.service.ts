@@ -8,13 +8,23 @@ import { generateTokenData, RequestInfos } from './uitls';
 
 const USER_INFO = { account: 'account', username: 'eddy' };
 
-const router: { [key: string] : { option: ResponseOptions, verify: (info: RequestInfos) => (s$: Observable<ResponseOptions>) => Observable<ResponseOptions> } } = {
+const router: { [key: string]: { option: ResponseOptions, verify: (info: RequestInfos) => (s$: Observable<ResponseOptions>) => Observable<ResponseOptions> } } = {
   [APPLY_TOKEN]: {
-    option: { status: STATUS.OK, body: generateTokenData(USER_INFO)},
+    option: {
+      status: STATUS.OK,
+      get body() {
+        return generateTokenData(USER_INFO);
+      }
+    },
     verify: nothing
   },
   [REFRESH_TOKEN]: {
-    option: { status: STATUS.OK, body: generateTokenData(USER_INFO)},
+    option: {
+      status: STATUS.OK,
+      get body() {
+        return generateTokenData(USER_INFO);
+      }
+    },
     verify: verifyRefresh
   },
   [OK]: {
