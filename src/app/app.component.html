@@ -18,6 +18,9 @@
     <div class="alert alert-success" role="alert">
       <h5>AccessToken
         <div class="float-right">
+          <button class="badge badge-light mx-1" (click)="authService.switchLockedAccessInvalid()">
+            <span *ngIf="authService.lockedAccessInvalid" class="mr-1">🔒</span><span>locked invalid</span>
+          </button>
           <button class="badge badge-warning mx-1" (click)="authService.makeAccessInvalid()">make
             invalid</button>
           <button class="badge badge-danger mx-1" (click)="authService.removeAccessToken()">clean</button>
@@ -28,6 +31,9 @@
     <div class="alert alert-info" role="alert">
       <h5>RefreshToken
         <div class="float-right">
+          <button class="badge badge-light mx-1" (click)="authService.switchLockedRefreshInvalid()">
+            <span *ngIf="authService.lockedRefreshInvalid" class="mr-1">🔒</span><span>locked invalid</span>
+          </button>
           <button class="badge badge-warning mx-1" (click)="authService.makeRefreshInvalid()">make
             invalid</button>
           <button class="badge badge-danger mx-1" (click)="authService.removeRefreshToken()">clean</button>

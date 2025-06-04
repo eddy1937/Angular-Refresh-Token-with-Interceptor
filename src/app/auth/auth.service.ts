@@ -19,11 +19,22 @@ export class AuthService {
   public login$: Observable<User>;
   public logout$: Observable<User>;
 
+  private _lockedAccessInvalid = false;
+  private _lockedRefreshInvalid = false;
+
   constructor(private http: HttpClient) {
     [this.login$, this.logout$] = partition(this.userWithoutInit$,(user) => user !== null);
 
     this.login$.subscribe((res) => { });
     this.logout$.subscribe((res) => this.removeToken());
+  }
+
+  get lockedAccessInvalid() {
+    return this._lockedAccessInvalid;
+  }
+
+  get lockedRefreshInvalid() {
+    return this._lockedRefreshInvalid;
   }
 
   get user() {
@@ -35,11 +46,11 @@ export class AuthService {
   }
 
   get accessToken() {
-    return localStorage.getItem(ACCESS_TOKEN);
+    return this.lockedAccessInvalid ? Invalid: localStorage.getItem(ACCESS_TOKEN);
   }
 
   get refreshToken() {
-    return localStorage.getItem(REFRESH_TOKEN);
+    return this.lockedRefreshInvalid ? Invalid: localStorage.getItem(REFRESH_TOKEN);
   }
 
   get token() {
@@ -83,6 +94,14 @@ export class AuthService {
 
   removeRefreshToken(): void {
     localStorage.removeItem(REFRESH_TOKEN);
+  }
+
+  switchLockedAccessInvalid(): void {
+    this._lockedAccessInvalid = !this._lockedAccessInvalid;
+  }
+
+  switchLockedRefreshInvalid(): void {
+    this._lockedRefreshInvalid = !this._lockedRefreshInvalid;
   }
 
   makeAccessInvalid(): void {
