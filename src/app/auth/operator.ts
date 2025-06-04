@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, concat, ignoreElements, Observable, take, tap, throwError } from "rxjs";
+import { catchError, concat, ignoreElements, Observable, ObservableInput, OperatorFunction, take, tap, throwError } from "rxjs";
 import { ACCESS_TOKEN, REFRESH_TOKEN, Token } from "./uitls";
 
 function catchHttpError(status: number) {
-  return (next: (err: HttpErrorResponse) => Observable<any>) => {
-    return catchError((err) => err.status === status ? next(err) : throwError(() => err));
-  };
+  return <T, O> (selector: (err: HttpErrorResponse, caught: Observable<T>) => ObservableInput<O>): OperatorFunction<T, T | O> =>
+    catchError((err: HttpErrorResponse, caught: Observable<T>) =>
+      err.status === status ? selector(err, caught) : throwError(() => err)
+    );
 }
 
 
